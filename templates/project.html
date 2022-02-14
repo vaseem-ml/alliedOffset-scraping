@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Display a map</title>
+	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+	<script src="https://unpkg.com/maplibre-gl@2.1.1/dist/maplibre-gl.js"></script>
+	<link href="https://unpkg.com/maplibre-gl@2.1.1/dist/maplibre-gl.css" rel="stylesheet" />
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+
+		#map {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 50%;
+		}
+
+		.container {
+			width: 100%;
+			height: auto;
+		}
+
+		.title {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 45px;
+			margin-bottom: 30px;
+			margin-top: 30px;
+		}
+
+		.title-real{
+			width: 60%;
+			border-radius: 8px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100%;
+			border:1px solid #c4c4c4;
+		}
+
+		h2{
+			margin: 0;
+		}
+
+		.map-container {
+			width: 100%;
+			height: 600px;
+			position: relative;
+		}
+
+		.map-real {
+			width: 60% !important;
+			left: 20% !important;
+			right: 20% !important;
+		}
+
+		.description-container{
+			margin-top: 30px;
+			padding: 0 20% 0 20%;
+		}
+
+		.description-real{
+			width: 100%;
+			border-radius: 8px;
+			border:1px solid #c4c4c4;
+			margin-bottom: 30px;
+			justify-content: center;
+			display: flex;
+			padding-top: 20px;
+			padding-bottom: 20px;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="title">
+			<div class="title-real"><h2>{{ project.iloc[0]["Name"] }}</h2></div>
+		</div>
+		<div class="map-container">
+			<div id="map" class="map-real"></div>
+		</div>
+
+		<div class="description-container">
+			<div class="description-real">{{ project.iloc[0]["Description"] }}</div>
+		</div>
+	</div>
+	<!-- <div id="map"></div> -->
+	<script>
+        var projectLocation = '{{ project.iloc[0]["Location"] }}';
+        console.log("project location first", projectLocation)
+        if (projectLocation!='nan') {
+            projectLocation = projectLocation.split("ll=")[1].split("&amp")[0].split(",");
+            console.log("project location", projectLocation)
+            var map = new maplibregl.Map({
+                container: 'map', // container id
+                style: 'https://api.maptiler.com/maps/hybrid/style.json?key=get_your_own_OpIi9ZULNHzrESv6T2vL',
+                center: [projectLocation[1], projectLocation[0]], // starting position [lng, lat]
+                zoom: 7 // starting zoom
+            });
+            marker = new maplibregl.Marker().setLngLat([projectLocation[1], projectLocation[0]]).addTo(map);
+        } else {
+            console.log("map is not available for this porject")
+        }
+
+        
+	</script>
+
+</body>
+
+</html>
